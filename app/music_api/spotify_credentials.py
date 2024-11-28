@@ -12,7 +12,6 @@ class SpotifyAuth():
 
     def get_spotify_token(self):
         if self.access_token == None or self.expire_time < time.time():
-            print("rereshing")
             self.refresh_spotify_token()
         
         return self.access_token
@@ -31,5 +30,3 @@ class SpotifyAuth():
 
         self.access_token = data['access_token']
         self.expire_time = time.time() + data['expires_in']
-
-spotifyAuth = SpotifyAuth()

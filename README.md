@@ -1,2 +1,3 @@
 # smocks
-Trade music artists like they are socks
+
+Trade music artists like they are stocks

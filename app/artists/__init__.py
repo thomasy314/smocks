@@ -1,0 +1,1 @@
+from app.artists.routes import bp
