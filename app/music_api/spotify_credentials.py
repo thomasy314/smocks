@@ -1,6 +1,9 @@
-import requests
 import time
-from config import SpotifyConfig
+
+import requests
+
+from config import DEFAULT_REQUEST_TIMEOUT, SpotifyConfig
+
 
 class SpotifyAuth():
     auth_url = 'https://accounts.spotify.com/api/token'
@@ -13,7 +16,6 @@ class SpotifyAuth():
     def get_spotify_token(self):
         if self.access_token == None or self.expire_time < time.time():
             self.refresh_spotify_token()
-        
         return self.access_token
 
     def refresh_spotify_token(self):
@@ -25,7 +27,8 @@ class SpotifyAuth():
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded'
         }
-        response = requests.post(self.auth_url, data=body, headers=headers)
+        response = requests.post(
+            self.auth_url, data=body, headers=headers, timeout=DEFAULT_REQUEST_TIMEOUT)
         data = response.json()
 
         self.access_token = data['access_token']
