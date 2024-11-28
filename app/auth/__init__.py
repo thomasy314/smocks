@@ -14,7 +14,9 @@ def authorize_request(f):
         authorization = request.headers.get('Authorization')
 
         if not authorization:
-            abort(401, description="Unauthorized - Missing Authorization header")
+            response = make_response("Unauthorized - Missing Authorization header", 401)
+            response.headers['WWW-Authenticate'] = 'Basic'
+            abort(response)
             return None
 
         # Get auth header parts
@@ -47,12 +49,15 @@ def authorize_request(f):
         account = Account.query.filter_by(username=username).first()
 
         if not account:
-            abort(
-                401, description=f'No account found for this username: {username}')
+            response = make_response(f'Unauthorized - No account found for this username: {username}', 401)
+            response.headers['WWW-Authenticate'] = 'Basic'
+            abort(response)
             return
 
         if not bcrypt.check_password_hash(account.password, password):
-            abort(401, description='Incorrect password')
+            response = make_response('Unauthorized - Incorrect password', 401)
+            response.headers['WWW-Authenticate'] = 'Basic'
+            abort(response)
             return
 
         return f(*args, **kwargs)
