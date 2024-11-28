@@ -9,8 +9,4 @@ def create_app(config_class=Config):
 
     db.init_app(app)
 
-    @app.route('/test')
-    def test():
-        return "test"
-
     return app
