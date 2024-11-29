@@ -1,14 +1,13 @@
 from flask import Blueprint
 
 from app.auth import authorize_request
-from app.music_api import SpotifyAPI
+from app.extensions import spotifyAPI
 
 bp = Blueprint('artists', __name__)
-spotifyAPI = SpotifyAPI()
 
 
 @bp.route('/<string:artist_id>')
-@authorize_request
+@authorize_request()
 def getArtist(artist_id: str):
     artist_info = spotifyAPI.get_artist(artist_id)
     response_data = {

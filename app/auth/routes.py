@@ -1,14 +1,17 @@
 from flask import Blueprint, request
 
 from app.accounts import Account
-from app.auth import authorize_request
+from app.auth.validators.request_validator import RegisterBody
 from app.extensions import bcrypt, db
+from app.request_validator import validate_request
 
 bp = Blueprint("auth", __name__)
 
 
 @bp.route("/register", methods=["POST"])
+@validate_request(RegisterBody())
 def register():
+    """ Handles creating new users """
     username = request.json.get("username")
     password = request.json.get("password")
 
