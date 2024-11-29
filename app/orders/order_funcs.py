@@ -41,13 +41,14 @@ def execute_market_order(order):
         5. commit
     """
     artist = spotifyAPI.get_artist(order.asset_id)
+    smock_price = artist['popularity']
 
     side_mult = 1 if order.side == OrderSide.buy else -1
 
     quantity = order.quantity * side_mult
 
     if order.notional:
-        quantity = order.notional//artist['popularity'] * side_mult
+        quantity = order.notional//smock_price * side_mult
 
     account = Account.query.get_or_404(order.account_id)
     account.balance -= artist['popularity'] * quantity
@@ -58,10 +59,12 @@ def execute_market_order(order):
         position = Position(
             asset_id=order.asset_id,
             account_id=order.account_id,
-            quantity=quantity
+            quantity=quantity,
+            average_entry_price=smock_price
         )
     else:
         position.quantity += quantity
+        position.average_entry_price += (smock_price - position.average_entry_price)/(position.quantity)
 
     order.status = OrderStatus.completed
 
