@@ -4,7 +4,7 @@ from sqlalchemy.exc import IntegrityError
 
 from app.accounts import Account
 from app.extensions import db, spotifyAPI
-from app.orders.models.orders import Order, OrderSide, OrderStatus
+from app.orders.models.orders import Order, OrderSide, OrderStatus, OrderType
 from app.positions import Position
 
 
@@ -30,7 +30,8 @@ def create_new_order(asset_id, account_id, side, quantity, notional, limit_price
 
     return new_order
 
-def execute_market_order(original_order):
+
+def execute_market_order(order):
     """
     buying:
         1. get quantity
@@ -39,30 +40,30 @@ def execute_market_order(original_order):
         4. update status to completed
         5. commit
     """
-    artist = spotifyAPI.get_artist(original_order.asset_id)
+    artist = spotifyAPI.get_artist(order.asset_id)
 
-    side_mult = 1 if original_order.side == OrderSide.buy else -1
+    side_mult = 1 if order.side == OrderSide.buy else -1
 
-    quantity = original_order.quantity * side_mult
+    quantity = order.quantity * side_mult
 
-    if original_order.notional:
-        quantity = original_order.notional//artist['popularity'] * side_mult
+    if order.notional:
+        quantity = order.notional//artist['popularity'] * side_mult
 
-    account = Account.query.get_or_404(original_order.account_id)
+    account = Account.query.get_or_404(order.account_id)
     account.balance -= artist['popularity'] * quantity
 
-    position = Position.query.get((original_order.account_id, original_order.asset_id))
+    position = Position.query.get((order.account_id, order.asset_id))
 
     if not position:
         position = Position(
-            asset_id=original_order.asset_id,
-            account_id=original_order.account_id,
+            asset_id=order.asset_id,
+            account_id=order.account_id,
             quantity=quantity
         )
     else:
         position.quantity += quantity
 
-    original_order.status = OrderStatus.completed
+    order.status = OrderStatus.completed
 
     try:
         if position.quantity == 0:
@@ -72,6 +73,13 @@ def execute_market_order(original_order):
         db.session.commit()
     except IntegrityError as error:
         db.session.rollback()
-        original_order.status = OrderStatus.failed
+        order.status = OrderStatus.failed
         db.session.commit()
         raise error
+
+def excecute_order(order):
+    order_type_funcs = {
+        OrderType.market: execute_market_order
+    }
+
+    order_type_funcs[order.type](order)

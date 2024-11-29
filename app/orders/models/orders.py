@@ -9,9 +9,9 @@ from app.extensions import db
 class OrderType(Enum):
     """ Types of orders you can make when buying or selling smocks """
     market=1
-    limit=2
-    stop=3
-    stop_limit=4
+    # limit=2
+    # stop=3
+    # stop_limit=4
 
 class OrderStatus(Enum):
     """ States for the status of an order"""

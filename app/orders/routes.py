@@ -2,7 +2,7 @@ from flask import Blueprint, request
 from sqlalchemy.exc import IntegrityError
 
 from app.auth import authorize_request
-from app.orders.order_funcs import create_new_order, execute_market_order
+from app.orders.order_funcs import create_new_order, excecute_order
 from app.orders.validators.buy_order_validator import BuyOrderBody
 from app.request_validator import validate_request
 
@@ -38,7 +38,7 @@ def buy_order(account_id):
         )
 
     try:
-        execute_market_order(new_order)    
+        excecute_order(new_order)    
         return "", 200
     except IntegrityError as error:
         return str(error.orig), 400
