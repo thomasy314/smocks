@@ -5,6 +5,7 @@ from app.artists import bp as artists_bp
 from app.auth import bp as auth_bp
 from app.extensions import bcrypt, db
 from app.orders import bp as orders_bp
+from app.positions import bp as positions_bp
 from config import Config
 
 
@@ -20,5 +21,6 @@ def create_app(config_class=Config):
     app.register_blueprint(auth_bp)
     app.register_blueprint(orders_bp, url_prefix='/orders')
     app.register_blueprint(artists_bp, url_prefix='/artists')
+    app.register_blueprint(positions_bp, url_prefix='/positions')
 
     return app

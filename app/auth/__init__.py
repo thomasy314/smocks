@@ -5,7 +5,7 @@ from flask import abort, make_response, request
 
 from app.accounts import Account
 from app.auth.routes import bp
-from app.auth.utils import mask_value
+from app.auth.utils import mask_value, unmask_value
 from app.extensions import bcrypt
 
 

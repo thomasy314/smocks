@@ -1,5 +1,6 @@
 from sqlalchemy import CheckConstraint
 
+from app.auth import mask_value
 from app.extensions import db
 
 
@@ -14,3 +15,12 @@ class Position(db.Model):
     __table_args__ = (
         CheckConstraint('quantity > 0', name="check_quantity_positive"),
     )
+
+    @property
+    def serialize(self):
+        return {
+            'account_id': mask_value(self.account_id),
+            'asset_id': self.asset_id,
+            'quantity': self.quantity,
+            'average_entry_price': self.average_entry_price
+        }
