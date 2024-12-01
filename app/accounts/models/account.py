@@ -1,5 +1,6 @@
 from sqlalchemy import CheckConstraint
 
+from app.auth.utils import mask_value
 from app.extensions import db
 from config import AccountConfig
 
@@ -15,3 +16,15 @@ class Account(db.Model):
     __table_args__ = (
         CheckConstraint('balance > 0', name='check_balance_positive'),
     )
+
+    @property
+    def masked_id(self):
+        return mask_value(self.id)
+
+    @property
+    def serlize(self):
+        return {
+            'id': self.masked_id,
+            'username': self.username,
+            'balance': self.balance
+        }

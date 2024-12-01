@@ -56,10 +56,14 @@ class Order(db.Model):
         return mask_value(self.id)
 
     @property
+    def masked_account_id(self):
+        return mask_value(self.account_id)
+
+    @property
     def serialize(self):
         return {
             'id': self.masked_id,
-            'account_id': self.account_id,
+            'account_id': self.masked_account_id,
             'asset_id': self.asset_id,
             'side': self.side.value,
             'create_at': self.created_at,

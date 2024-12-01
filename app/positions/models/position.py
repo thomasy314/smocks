@@ -17,9 +17,13 @@ class Position(db.Model):
     )
 
     @property
+    def masked_account_id(self):
+        return mask_value(self.account_id)
+
+    @property
     def serialize(self):
         return {
-            'account_id': mask_value(self.account_id),
+            'account_id': self.masked_account_id,
             'asset_id': self.asset_id,
             'quantity': self.quantity,
             'average_entry_price': self.average_entry_price
