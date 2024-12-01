@@ -8,6 +8,10 @@ from app.orders.models.orders import Order, OrderSide, OrderStatus, OrderType
 from app.positions import Position
 
 
+def get_order_by_id(order_id):
+    return Order.query.get(order_id)
+
+
 def create_new_order(asset_id, account_id, side, quantity, notional, limit_price, stop_price, order_type):
     current_time = datetime.now()
 

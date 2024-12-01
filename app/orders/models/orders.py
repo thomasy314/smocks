@@ -1,29 +1,31 @@
 from enum import Enum
 
 from sqlalchemy import CheckConstraint, ForeignKey
+from sqlalchemy.ext.hybrid import hybrid_property
 
 from app.accounts import Account
+from app.auth import mask_value
 from app.extensions import db
 
 
 class OrderType(Enum):
     """ Types of orders you can make when buying or selling smocks """
-    market=1
+    market='market'
     # limit=2
     # stop=3
     # stop_limit=4
 
 class OrderStatus(Enum):
     """ States for the status of an order"""
-    created=1
-    completed=2
-    cancelled=3
-    failed=4
+    created='created'
+    completed='completed'
+    cancelled='concelled'
+    failed='failed'
 
 class OrderSide(Enum):
     """ Sides of an order """
-    buy=1
-    sell=2
+    buy='buy'
+    sell='sell'
 
 
 class Order(db.Model):
@@ -49,3 +51,23 @@ class Order(db.Model):
         CheckConstraint('quantity IS NOT NULL OR notional IS NOT NULL', name="check_for_quantity_or_notional")
     )
 
+    @property
+    def masked_id(self):
+        return mask_value(self.id)
+
+    @property
+    def serialize(self):
+        return {
+            'id': self.masked_id,
+            'account_id': self.account_id,
+            'asset_id': self.asset_id,
+            'side': self.side.value,
+            'create_at': self.created_at,
+            'updated_at': self.updated_at,
+            'status': self.status.value,
+            'limit_price': self.limit_price,
+            'stop_price': self.stop_price,
+            'type': self.type.value,
+            'quantity': self.quantity,
+            'notional': self.notional
+        }

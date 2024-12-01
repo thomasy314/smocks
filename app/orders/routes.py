@@ -1,12 +1,19 @@
-from flask import Blueprint, request
+from flask import Blueprint, make_response, request
 from sqlalchemy.exc import IntegrityError
 
-from app.auth import authorize_request
-from app.orders.order_funcs import create_new_order, excecute_order
+from app.auth import authorize_request, unmask_value
+from app.orders.service import create_new_order, excecute_order, get_order_by_id
 from app.orders.validators.buy_order_validator import BuyOrderBody
 from app.request_validator import validate_request
 
 bp = Blueprint('orders', __name__)
+
+@bp.route('/<string:order_id>')
+@authorize_request(add_account_id=True)
+def get_order(account_id, order_id):
+    order = get_order_by_id(order_id=unmask_value(order_id))
+
+    return order.serialize, 200
 
 @bp.route('/buy', methods=['POST'])
 @bp.route('/sell', methods=['POST'])
@@ -39,7 +46,12 @@ def buy_order(account_id):
 
     try:
         excecute_order(new_order)    
-        return "", 200
+
+
+        response = make_response("", 201)
+        # TODO: Change to full path
+        response.headers['Location'] = f'/orders/{new_order.masked_id}'
+        return response, 201
     except IntegrityError as error:
         return str(error.orig), 400
 
