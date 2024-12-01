@@ -1,3 +1,5 @@
+from functools import reduce
+
 from sqlalchemy import CheckConstraint
 
 from app.auth.utils import mask_value
@@ -22,9 +24,9 @@ class Account(db.Model):
         return mask_value(self.id)
 
     @property
-    def serlize(self):
+    def serialize(self):
         return {
             'id': self.masked_id,
             'username': self.username,
-            'balance': self.balance
+            'balance': self.balance,
         }

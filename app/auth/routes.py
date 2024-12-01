@@ -1,6 +1,7 @@
-from flask import Blueprint, request
+from flask import Blueprint, make_response, request
 
 from app.accounts import Account
+from app.auth.service import create_account
 from app.auth.validators.request_validator import RegisterBody
 from app.extensions import bcrypt, db
 from app.request_validator import validate_request
@@ -21,13 +22,9 @@ def register():
     if not password:
         return "missing password", 400
 
-    if Account.query.filter_by(username=username).first():
-        return "username already exists", 400
+    new_user = create_account(username=username, password=password)
 
-    hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
+    response = make_response(new_user.serialize, 201)
+    response.headers['Location'] = f'/accounts/{new_user.masked_id}'
 
-    new_user = Account(username=username, password=hashed_password)
-    db.session.add(new_user)
-    db.session.commit()
-
-    return "", 201
+    return response

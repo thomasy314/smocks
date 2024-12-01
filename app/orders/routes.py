@@ -8,7 +8,7 @@ from app.request_validator import validate_request
 
 bp = Blueprint('orders', __name__)
 
-@bp.route('/<string:order_id>')
+@bp.get('/<string:order_id>')
 @authorize_request(add_account_id=True)
 def get_order(account_id, order_id):
     order = get_order_by_id(order_id=unmask_value(order_id))
@@ -18,8 +18,8 @@ def get_order(account_id, order_id):
 
     return order.serialize, 200
 
-@bp.route('/buy', methods=['POST'])
-@bp.route('/sell', methods=['POST'])
+@bp.post('/buy')
+@bp.post('/sell')
 @validate_request(CreateOrderRequest())
 @authorize_request(add_account_id=True)
 def create_order(account_id):
