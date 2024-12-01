@@ -1,7 +1,7 @@
 import base64
 from functools import wraps
 
-from flask import abort, make_response, request
+from flask import make_response, request
 
 from app.accounts import Account
 from app.auth.routes import bp
@@ -19,8 +19,8 @@ def authorize_request(add_account_id=False):
             if not authorization:
                 response = make_response("Unauthorized - Missing Authorization header", 401)
                 response.headers['WWW-Authenticate'] = 'Basic'
-                abort(response)
-                return None
+                # abort(response)
+                return response
 
             # Get auth header parts
             basic_auth = authorization.split(' ')
@@ -29,8 +29,7 @@ def authorize_request(add_account_id=False):
                 response = make_response(
                     'Unauthorized - Incorrect auth scheme', 401)
                 response.headers['WWW-Authenticate'] = 'Basic'
-                abort(response)
-                return
+                return response
 
             # decode auth header
             basic_token = basic_auth[1]
@@ -43,8 +42,7 @@ def authorize_request(add_account_id=False):
                 response = make_response(
                     description, 401)
                 response.headers['WWW-Authenticate'] = 'Basic'
-                abort(response)
-                return
+                return response
 
             # Check credentials in db
             [username, password] = decoded_token
@@ -54,14 +52,12 @@ def authorize_request(add_account_id=False):
             if not account:
                 response = make_response(f'Unauthorized - No account found for this username: {username}', 401)
                 response.headers['WWW-Authenticate'] = 'Basic'
-                abort(response)
-                return
+                return response
 
             if not bcrypt.check_password_hash(account.password, password):
                 response = make_response('Unauthorized - Incorrect password', 401)
                 response.headers['WWW-Authenticate'] = 'Basic'
-                abort(response)
-                return
+                return response
 
             if add_account_id:
                 kwargs.update({"account_id": account.id})

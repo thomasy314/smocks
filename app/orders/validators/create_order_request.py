@@ -1,10 +1,10 @@
 from marshmallow import Schema, fields
 
-from app.orders.models.orders import OrderSide, OrderType
+from app.orders.models.orders import OrderType
 
 
-class BuyOrderBody(Schema):
-    """ Schema for buy order request """
+class CreateOrderRequest(Schema):
+    """ Schema for creating an order request """
     asset_id = fields.Str(required=True)
     quantity = fields.Int()
     notional = fields.Float()

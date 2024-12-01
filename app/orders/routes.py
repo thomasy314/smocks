@@ -3,7 +3,7 @@ from sqlalchemy.exc import IntegrityError
 
 from app.auth import authorize_request, unmask_value
 from app.orders.service import create_new_order, excecute_order, get_order_by_id
-from app.orders.validators.buy_order_validator import BuyOrderBody
+from app.orders.validators.create_order_request import CreateOrderRequest
 from app.request_validator import validate_request
 
 bp = Blueprint('orders', __name__)
@@ -13,13 +13,16 @@ bp = Blueprint('orders', __name__)
 def get_order(account_id, order_id):
     order = get_order_by_id(order_id=unmask_value(order_id))
 
+    if order.account_id != account_id:
+        return 'Forbidden', 403
+
     return order.serialize, 200
 
 @bp.route('/buy', methods=['POST'])
 @bp.route('/sell', methods=['POST'])
-@validate_request(BuyOrderBody())
+@validate_request(CreateOrderRequest())
 @authorize_request(add_account_id=True)
-def buy_order(account_id):
+def create_order(account_id):
     """ create smock buy order"""
 
     side = request.path.split('/')[-1]
