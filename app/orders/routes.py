@@ -5,6 +5,7 @@ from app.auth import authorize_request, unmask_value
 from app.orders.service import create_new_order, excecute_order, get_order_by_id
 from app.orders.validators.create_order_request import CreateOrderRequest
 from app.request_validator import validate_request
+from app.smock_response import SmockResponse
 
 bp = Blueprint('orders', __name__)
 
@@ -51,10 +52,9 @@ def create_order(account_id):
         excecute_order(new_order)    
 
 
-        response = make_response("", 201)
-        # TODO: Change to full path
+        response = SmockResponse(new_order.serialize, 201)
         response.headers['Location'] = f'/orders/{new_order.masked_id}'
-        return response, 201
+        return response
     except IntegrityError as error:
         return str(error.orig), 400
 

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from sqlalchemy.exc import IntegrityError
 
@@ -13,7 +13,7 @@ def get_order_by_id(order_id):
 
 
 def create_new_order(asset_id, account_id, side, quantity, notional, limit_price, stop_price, order_type):
-    current_time = datetime.now()
+    current_time = datetime.now(timezone.utc)
 
     new_order = Order(
         asset_id=asset_id,

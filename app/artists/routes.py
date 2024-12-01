@@ -2,6 +2,7 @@ from flask import Blueprint
 
 from app.auth import authorize_request
 from app.extensions import spotifyAPI
+from app.smock_response import SmockResponse
 
 bp = Blueprint('artists', __name__)
 

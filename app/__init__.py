@@ -3,6 +3,7 @@ from flask import Flask
 
 from app.error_handler import register_error_handlers
 from app.extensions import bcrypt, db
+from app.smock_response import SmockResponse
 from config import Config
 
 
@@ -10,6 +11,7 @@ def create_app(config_class=Config):
     load_dotenv()
 
     app = Flask(__name__)
+    app.response_class = SmockResponse
     app.config.from_object(config_class)
 
     db.init_app(app)

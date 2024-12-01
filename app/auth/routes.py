@@ -1,10 +1,9 @@
-from flask import Blueprint, make_response, request
+from flask import Blueprint, request
 
-from app.accounts import Account
 from app.auth.service import create_account
 from app.auth.validators.request_validator import RegisterBody
-from app.extensions import bcrypt, db
 from app.request_validator import validate_request
+from app.smock_response import SmockResponse
 
 bp = Blueprint("auth", __name__)
 
@@ -24,7 +23,11 @@ def register():
 
     new_user = create_account(username=username, password=password)
 
-    response = make_response(new_user.serialize, 201)
+    if not new_user:
+        return "Unable to create user", 400
+
+    print('new user: ', new_user)
+    response = SmockResponse(new_user.serialize, status=201)
     response.headers['Location'] = f'/accounts/{new_user.masked_id}'
 
     return response
