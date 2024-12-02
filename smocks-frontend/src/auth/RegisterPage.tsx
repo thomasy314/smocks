@@ -2,11 +2,11 @@ import { useNavigate } from "react-router-dom";
 import BasicAuthLogin from "../auth/BasicAuthLogin";
 import {
   SmockResponseStatus,
-  useSmocksNoAuthApi,
+  useNoAuthSmocksApi,
 } from "../hooks/use-smocks-api";
 
 function RegisterPage() {
-  const { register } = useSmocksNoAuthApi();
+  const { register } = useNoAuthSmocksApi();
   const navigate = useNavigate();
 
   function handleRegister(username: string, password: string) {

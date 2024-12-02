@@ -12,6 +12,21 @@ type SmockResponse = {
   data: any; //object | object[];
 };
 
+enum OrderSide {
+  BUY = "buy",
+  SELL = "sell",
+}
+
+enum OrderType {
+  MARKET = "market",
+}
+
+type Order = {
+  assetId: string;
+  type: OrderType;
+  quantity: number;
+};
+
 function useNoAuthSmocksApi() {
   const { logout: basicAuthLogout } = useBasicAuthState();
 
@@ -121,15 +136,37 @@ function useSmocksApi(basicAuthToken: string) {
     return getMyPositionsResponse;
   }
 
+  async function createPurchaseOrder({
+    assetId,
+    type,
+    quantity,
+  }: Order): Promise<SmockResponse> {
+    return await _sendSmockApiRequest(`/orders/buy`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        asset_id: assetId,
+        type,
+        quantity,
+      }),
+    });
+  }
+
   return {
     getArtist,
     getMyAccount,
     getMyPositions,
+    createPurchaseOrder,
   };
 }
 
 export {
+  OrderSide,
+  OrderType,
   SmockResponseStatus,
+  useNoAuthSmocksApi,
   useSmocksApi,
-  useNoAuthSmocksApi as useSmocksNoAuthApi,
 };
+export type { Order };

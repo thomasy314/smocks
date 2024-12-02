@@ -7,6 +7,7 @@ import RegisterPage from "./auth/RegisterPage";
 import PrivateRoute from "./commonComponents/PrivateRoute";
 import LandingPage from "./LandingPage";
 import "./main.css";
+import OrderPage from "./orders/OrderPage";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -21,6 +22,14 @@ createRoot(document.getElementById("root")!).render(
           element={
             <PrivateRoute>
               <AccountPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/order"
+          element={
+            <PrivateRoute>
+              <OrderPage />
             </PrivateRoute>
           }
         />

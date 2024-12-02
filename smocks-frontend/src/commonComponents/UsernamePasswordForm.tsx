@@ -10,7 +10,7 @@ function UsernamePasswordForm({ onSubmit }: UsernamePasswordFormProps) {
     <form className="usernamePasswordForm" onSubmit={onSubmit}>
       <input type="text" placeholder="username" name="username" />
       <input type="password" placeholder="password" name="password" />
-      <input type="submit" />
+      <input type="submit" value="submit" />
     </form>
   );
 }

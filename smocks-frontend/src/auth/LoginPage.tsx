@@ -3,11 +3,11 @@ import { BASIC_AUTH_STORAGE_KEY } from "../auth/auth.constants";
 import BasicAuthLogin from "../auth/BasicAuthLogin";
 import {
   SmockResponseStatus,
-  useSmocksNoAuthApi,
+  useNoAuthSmocksApi,
 } from "../hooks/use-smocks-api";
 
 function LoginPage() {
-  const { login } = useSmocksNoAuthApi();
+  const { login } = useNoAuthSmocksApi();
   const navigate = useNavigate();
 
   function handleLogin(username: string, password: string) {
