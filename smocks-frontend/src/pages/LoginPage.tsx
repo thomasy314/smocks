@@ -25,11 +25,14 @@ function LoginPage() {
 
   return (
     <>
-      <h1 style={{ textAlign: "center" }}>Login</h1>
-      <BasicAuthLogin
-        checkLoginFunc={handleLogin}
-        onLoginSuccessful={onLoginSuccessful}
-      />
+      <main style={{ textAlign: "center" }}>
+        <h1>Login</h1>
+        <BasicAuthLogin
+          checkLoginFunc={handleLogin}
+          onLoginSuccessful={onLoginSuccessful}
+        />
+        <a href="/register">Create Account</a>
+      </main>
     </>
   );
 }

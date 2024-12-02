@@ -21,11 +21,14 @@ function RegisterPage() {
 
   return (
     <>
-      <h1 style={{ textAlign: "center" }}>Register</h1>
-      <BasicAuthLogin
-        checkLoginFunc={handleRegister}
-        onLoginSuccessful={onRegisterSuccessful}
-      />
+      <main style={{ textAlign: "center" }}>
+        <h1>Register</h1>
+        <BasicAuthLogin
+          checkLoginFunc={handleRegister}
+          onLoginSuccessful={onRegisterSuccessful}
+        />
+        <a href="/login">Login</a>
+      </main>
     </>
   );
 }
