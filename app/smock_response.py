@@ -61,18 +61,23 @@ class SmockResponse(Response):
                 except ValueError:
                     data = {"message": data}
 
-        response = json.dumps(SmockResponseFormatter(200, data).serialize)
+        response = json.dumps(SmockResponseFormatter(status, data).serialize)
+
+
 
         default_headers = {
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Headers': '*'
         }
 
-        # Initialize parent class
+        headers = kwargs.pop('headers', dict()) or dict()
+
+        headers.update(default_headers)
+
         super().__init__(
             response=response,
             status=status or self.default_status,
             mimetype='application/json',
-            headers=default_headers,
+            headers=headers,
             **kwargs
         )
