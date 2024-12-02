@@ -10,8 +10,11 @@ type SmockResponse = {
 };
 
 function useNoAuthSmocksApi() {
-  async function login(username: string, password: string): Promise<boolean> {
-    const loginResponse: SmockResponse = await fetch(`/api/login`, {
+  async function login(
+    username: string,
+    password: string
+  ): Promise<SmockResponse> {
+    return fetch(`/api/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -21,12 +24,27 @@ function useNoAuthSmocksApi() {
         password,
       }),
     }).then(async (response) => response.json());
+  }
 
-    return loginResponse.status === SmockResponseStatus.SUCCESS;
+  async function register(
+    username: string,
+    password: string
+  ): Promise<SmockResponse> {
+    return fetch(`/api/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username,
+        password,
+      }),
+    }).then(async (response) => response.json());
   }
 
   return {
     login,
+    register,
   };
 }
 
@@ -68,4 +86,8 @@ function useSmocksApi(basicAuthToken: string) {
   };
 }
 
-export { useSmocksApi, useNoAuthSmocksApi as useSmocksNoAuthApi };
+export {
+  SmockResponseStatus,
+  useSmocksApi,
+  useNoAuthSmocksApi as useSmocksNoAuthApi,
+};

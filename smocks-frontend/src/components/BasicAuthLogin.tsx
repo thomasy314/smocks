@@ -1,4 +1,5 @@
 import { FormEvent } from "react";
+import UsernamePasswordForm from "../commonComponents/usernamePasswordForm";
 
 type LoginProps = {
   checkLoginFunc: (username: string, password: string) => Promise<boolean>;
@@ -14,12 +15,14 @@ function BasicAuthLogin({
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const formData = new FormData(event.target as HTMLFormElement);
+    const formElement = event.target as HTMLFormElement;
+
+    const formData = new FormData(formElement);
 
     const username = formData.get("username")?.toString();
     const password = formData.get("password")?.toString();
 
-    (event.target as HTMLFormElement).reset();
+    formElement.reset();
 
     if (!username || !password) {
       return;
@@ -34,13 +37,7 @@ function BasicAuthLogin({
     }
   }
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <input type="text" placeholder="username" name="username" />
-      <input type="password" placeholder="password" name="password" />
-      <input type="submit" />
-    </form>
-  );
+  return <UsernamePasswordForm onSubmit={handleSubmit} />;
 }
 
 export default BasicAuthLogin;

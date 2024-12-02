@@ -14,7 +14,7 @@ function PrivateRoute({ children }: PropsWithChildren<RequireBasicAuthProps>) {
     if (basicAuthToken === null) {
       navigate("/login");
     }
-  });
+  }, []);
 
   return <>{children}</>;
 }
