@@ -26,7 +26,6 @@ def register():
     if not new_user:
         return "Unable to create user", 400
 
-    print('new user: ', new_user)
     response = SmockResponse(new_user.serialize, status=201)
     response.headers['Location'] = f'/accounts/{new_user.masked_id}'
 

@@ -52,8 +52,6 @@ class SmockResponse(Response):
         **kwargs
     ):
 
-        print("data: ", data)
-
         if isinstance(data, (str)):
             if data == "":
                 data = None
@@ -65,10 +63,16 @@ class SmockResponse(Response):
 
         response = json.dumps(SmockResponseFormatter(200, data).serialize)
 
+        default_headers = {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': '*'
+        }
+
         # Initialize parent class
         super().__init__(
             response=response,
             status=status or self.default_status,
             mimetype='application/json',
+            headers=default_headers,
             **kwargs
         )

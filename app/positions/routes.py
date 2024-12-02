@@ -1,8 +1,6 @@
 from flask import Blueprint
 
 from app.auth import authorize_request
-from app.extensions import spotifyAPI
-from app.positions.models.position import Position
 from app.positions.service import get_account_positions
 
 bp = Blueprint("positions", __name__)
