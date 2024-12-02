@@ -7,7 +7,9 @@ import OrderForm from "./OrderForm";
 function OrderPage() {
   const { basicAuthToken } = useBasicAuthState();
 
-  const { createPurchaseOrder } = useSmocksApi(basicAuthToken ?? "");
+  const { createPurchaseOrder, createSaleOrder } = useSmocksApi(
+    basicAuthToken ?? ""
+  );
 
   const {
     accountData,
@@ -19,11 +21,12 @@ function OrderPage() {
   async function handleOrder(orderSide: OrderSide, order: Order) {
     switch (orderSide) {
       case OrderSide.BUY:
-        const orderResult = await createPurchaseOrder(order);
-        console.log(orderResult);
+        const purchaseResult = await createPurchaseOrder(order);
+        console.log("purchase", purchaseResult);
         break;
       case OrderSide.SELL:
-        // TODO: Add sell operation
+        const saleResult = await createSaleOrder(order);
+        console.log("sale", saleResult);
         break;
     }
 

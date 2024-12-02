@@ -154,11 +154,30 @@ function useSmocksApi(basicAuthToken: string) {
     });
   }
 
+  async function createSaleOrder({
+    assetId,
+    type,
+    quantity,
+  }: Order): Promise<SmockResponse> {
+    return await _sendSmockApiRequest(`/orders/sell`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        asset_id: assetId,
+        type,
+        quantity,
+      }),
+    });
+  }
+
   return {
     getArtist,
     getMyAccount,
     getMyPositions,
     createPurchaseOrder,
+    createSaleOrder,
   };
 }
 

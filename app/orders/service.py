@@ -68,7 +68,10 @@ def execute_market_order(order):
         )
     else:
         position.quantity += quantity
-        position.average_entry_price += (smock_price - position.average_entry_price)/(position.quantity)
+        if position.quantity != 0:
+            position.average_entry_price += (smock_price - position.average_entry_price)/(position.quantity)
+        else:
+            position.average_entry_price = 0
 
     order.status = OrderStatus.completed
 
