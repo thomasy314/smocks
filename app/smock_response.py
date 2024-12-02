@@ -50,7 +50,6 @@ class SmockResponse(Response):
         **kwargs
     ):
 
-
         if isinstance(data, (str)):
             if data == "":
                 data = None
@@ -62,21 +61,9 @@ class SmockResponse(Response):
 
         response = json.dumps(SmockResponseFormatter(status, data).serialize)
 
-
-
-        default_headers = {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': '*'
-        }
-
-        headers = kwargs.pop('headers', dict()) or dict()
-
-        headers.update(default_headers)
-
         super().__init__(
             response=response,
             status=status,
             mimetype=mimetype,
-            headers=headers,
             **kwargs
         )

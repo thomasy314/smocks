@@ -5,7 +5,7 @@ from app.positions.service import get_account_positions
 
 bp = Blueprint("positions", __name__)
 
-@bp.route('/')
+@bp.get('/')
 @authorize_request(add_account_id=True)
 def get_positions(account_id):
 

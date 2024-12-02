@@ -6,6 +6,7 @@ import LoginPage from "./auth/LoginPage";
 import RegisterPage from "./auth/RegisterPage";
 import PrivateRoute from "./commonComponents/PrivateRoute";
 import LandingPage from "./LandingPage";
+import "./main.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

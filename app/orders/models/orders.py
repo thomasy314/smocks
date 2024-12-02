@@ -46,7 +46,7 @@ class Order(db.Model):
     notional = db.Column(db.Float)
 
     __table_args__ = (
-        CheckConstraint('quantity > 0', name='check_quantity_positive'),
+        CheckConstraint('quantity >= 0', name='check_quantity_positive'),
         CheckConstraint('notional > 0', name='check_notional_positive'),
         CheckConstraint('quantity IS NOT NULL OR notional IS NOT NULL', name="check_for_quantity_or_notional")
     )

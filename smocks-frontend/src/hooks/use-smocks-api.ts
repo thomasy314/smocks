@@ -9,7 +9,7 @@ enum SmockResponseStatus {
 
 type SmockResponse = {
   status: SmockResponseStatus;
-  data: object;
+  data: any; //object | object[];
 };
 
 function useNoAuthSmocksApi() {
@@ -66,6 +66,13 @@ function useSmocksApi(basicAuthToken: string) {
   }
 
   async function _sendSmockApiRequest(url: string, requestInit: RequestInit) {
+    const defaultHeaders = _defaultHeaders();
+    const headers = new Headers({
+      ...Object.fromEntries(defaultHeaders.entries()),
+      ...Object.fromEntries(new Headers(requestInit.headers).entries()),
+    });
+    requestInit.headers = headers;
+
     const request: SmockResponse = await fetch(`/api${url}`, requestInit).then(
       (response) => response.json()
     );
@@ -82,7 +89,6 @@ function useSmocksApi(basicAuthToken: string) {
       `/artists/${artist_id}`,
       {
         method: "GET",
-        headers: _defaultHeaders(),
       }
     );
 
@@ -90,20 +96,35 @@ function useSmocksApi(basicAuthToken: string) {
   }
 
   async function getMyAccount(): Promise<SmockResponse> {
-    const getArtistResponse: SmockResponse = await _sendSmockApiRequest(
+    const getMyAccountResponse: SmockResponse = await _sendSmockApiRequest(
       `/accounts/me`,
       {
         method: "GET",
-        headers: _defaultHeaders(),
       }
     );
 
-    return getArtistResponse;
+    return getMyAccountResponse;
+  }
+
+  async function getMyPositions(): Promise<SmockResponse> {
+    const getMyPositionsResponse: SmockResponse = await _sendSmockApiRequest(
+      `/positions/`,
+      {
+        method: "GET",
+      }
+    );
+
+    if (getMyPositionsResponse.data) {
+      getMyPositionsResponse.data = Object.values(getMyPositionsResponse.data);
+    }
+
+    return getMyPositionsResponse;
   }
 
   return {
     getArtist,
     getMyAccount,
+    getMyPositions,
   };
 }
 

@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 from flask import Flask
+from flask_cors import CORS
 
 from app.error_handler import register_error_handlers
 from app.extensions import bcrypt, db
@@ -11,6 +12,7 @@ def create_app(config_class=Config):
     load_dotenv()
 
     app = Flask(__name__)
+    CORS(app)
     app.response_class = SmockResponse
     app.config.from_object(config_class)
 

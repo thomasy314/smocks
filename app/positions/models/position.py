@@ -22,9 +22,13 @@ class Position(db.Model):
 
     @property
     def serialize(self):
+
+        asset_info = self.asset_info
+
         return {
+            'id': f'{self.masked_account_id}:{asset_info['id']}',
             'account_id': self.masked_account_id,
-            'asset_info': self.asset_info,
+            'asset_info': asset_info,
             'quantity': self.quantity,
             'average_entry_price': self.average_entry_price
         }
