@@ -11,17 +11,18 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
+        <Route index element={<LandingPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+
         <Route
-          index
+          path="/account"
           element={
             <PrivateRoute>
-              <LandingPage />
+              <AccountPage />
             </PrivateRoute>
           }
         />
-        <Route path="/account" element={<AccountPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

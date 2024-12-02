@@ -1,13 +1,11 @@
 import { PropsWithChildren, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useLocalStorage } from "usehooks-ts";
+import useBasicAuthState from "../auth/useAuthState";
 
 type RequireBasicAuthProps = {};
 
 function PrivateRoute({ children }: PropsWithChildren<RequireBasicAuthProps>) {
-  const [basicAuthToken] = useLocalStorage("basicAuthToken", null, {
-    deserializer: (val) => val,
-  });
+  const { basicAuthToken } = useBasicAuthState();
   const navigate = useNavigate();
 
   useEffect(() => {

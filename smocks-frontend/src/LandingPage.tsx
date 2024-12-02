@@ -1,18 +1,18 @@
-import { useLocalStorage } from "usehooks-ts";
-import { BASIC_AUTH_STORAGE_KEY } from "./auth/auth.constants";
+import LogoutButton from "./auth/LogoutButton";
+import useBasicAuthState from "./auth/useAuthState";
 
 function LandingPage() {
-  const [basicAuthToken] = useLocalStorage(BASIC_AUTH_STORAGE_KEY, null, {
-    deserializer: (val) => val,
-  });
-
-  console.log(basicAuthToken);
+  const { basicAuthToken } = useBasicAuthState();
 
   return (
     <main style={{ textAlign: "center" }}>
       <h1>SMOCKS!</h1>
       {basicAuthToken ? (
-        <a href="/account">Account Dashboard</a>
+        <>
+          <a href="/account">Account Dashboard</a>
+          <br />
+          <LogoutButton />
+        </>
       ) : (
         <>
           <a href="/login">Login</a>

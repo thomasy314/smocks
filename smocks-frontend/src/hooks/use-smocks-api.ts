@@ -1,3 +1,4 @@
+import useBasicAuthState from "../auth/useAuthState";
 import { snakeCaseToCamelCase } from "../utils";
 
 enum SmockResponseStatus {
@@ -12,6 +13,8 @@ type SmockResponse = {
 };
 
 function useNoAuthSmocksApi() {
+  const { logout: basicAuthLogout } = useBasicAuthState();
+
   async function login(
     username: string,
     password: string
@@ -26,6 +29,10 @@ function useNoAuthSmocksApi() {
         password,
       }),
     }).then(async (response) => response.json());
+  }
+
+  async function logout() {
+    basicAuthLogout();
   }
 
   async function register(
@@ -46,6 +53,7 @@ function useNoAuthSmocksApi() {
 
   return {
     login,
+    logout,
     register,
   };
 }

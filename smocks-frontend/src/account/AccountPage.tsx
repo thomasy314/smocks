@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
-import { useLocalStorage } from "usehooks-ts";
-import { BASIC_AUTH_STORAGE_KEY } from "../auth/auth.constants";
+import LogoutButton from "../auth/LogoutButton";
+import useBasicAuthState from "../auth/useAuthState";
 import { SmockResponseStatus, useSmocksApi } from "../hooks/use-smocks-api";
 import AccountSummary, { AccountData } from "./AccountSummary";
 
 function AccountPage() {
-  const [basicAuthToken] = useLocalStorage<string>(BASIC_AUTH_STORAGE_KEY, "", {
-    deserializer: (val) => val,
-  });
+  const { basicAuthToken } = useBasicAuthState();
 
-  const { getMyAccount } = useSmocksApi(basicAuthToken);
+  const { getMyAccount } = useSmocksApi(basicAuthToken ?? "");
   const [accountData, setAccountData] = useState<AccountData | null>(null);
 
   useEffect(() => {
@@ -29,7 +27,10 @@ function AccountPage() {
     <main style={{ textAlign: "center" }}>
       <h1>Account</h1>
       {accountData ? (
-        <AccountSummary accountData={accountData} />
+        <>
+          <AccountSummary accountData={accountData} />
+          <LogoutButton />
+        </>
       ) : (
         <p>Loading</p>
       )}
