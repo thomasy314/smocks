@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import BasicAuthLogin from "../commonComponents/BasicAuthLogin";
+import PrivateRoute from "../commonComponents/BasicAuthLogin";
 import { useSmocksNoAuthApi } from "../hooks/use-smocks-api";
 
 function LoginPage() {
@@ -15,7 +15,7 @@ function LoginPage() {
   }
 
   return (
-    <BasicAuthLogin
+    <PrivateRoute
       checkLoginFunc={login}
       onLoginSuccessful={onLoginSuccessful}
     />

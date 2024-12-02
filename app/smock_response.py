@@ -41,16 +41,15 @@ class SmockResponse(Response):
     """
     Custom Flask Response class to format response to JSend format
     """
-    default_status = 200
-    default_mimetype = 'application/json'
 
     def __init__(
         self,
         data: Optional[Union[dict, list, str]] = None,
-        status: Optional[int] = None,
-        mimetype: Optional[str] = None,
+        status: Optional[int] = 200,
+        mimetype: Optional[str] = 'application/json',
         **kwargs
     ):
+
 
         if isinstance(data, (str)):
             if data == "":
@@ -76,8 +75,8 @@ class SmockResponse(Response):
 
         super().__init__(
             response=response,
-            status=status or self.default_status,
-            mimetype='application/json',
+            status=status,
+            mimetype=mimetype,
             headers=headers,
             **kwargs
         )
