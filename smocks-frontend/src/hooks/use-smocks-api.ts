@@ -1,3 +1,5 @@
+import { snakeCaseToCamelCase } from "../utils";
+
 enum SmockResponseStatus {
   SUCCESS = "success",
   FAIL = "fail",
@@ -55,29 +57,40 @@ function useSmocksApi(basicAuthToken: string) {
     return headers;
   }
 
-  async function getArtist(artist_id: string) {
-    const getArtistResponse: SmockResponse = await fetch(
-      `/api/artists/${artist_id}`,
+  async function _sendSmockApiRequest(url: string, requestInit: RequestInit) {
+    const request: SmockResponse = await fetch(`/api${url}`, requestInit).then(
+      (response) => response.json()
+    );
+
+    if (request.status === SmockResponseStatus.SUCCESS) {
+      request.data = snakeCaseToCamelCase(request.data);
+    }
+
+    return request;
+  }
+
+  async function getArtist(artist_id: string): Promise<SmockResponse> {
+    const getArtistResponse: SmockResponse = await _sendSmockApiRequest(
+      `/artists/${artist_id}`,
       {
         method: "GET",
         headers: _defaultHeaders(),
       }
-    ).then(async (response) => response.json());
+    );
 
-    if (getArtistResponse.status === SmockResponseStatus.SUCCESS) {
-      return getArtistResponse.data;
-    }
+    return getArtistResponse;
   }
 
-  async function getMyAccount() {
-    const getArtistResponse: SmockResponse = await fetch(`/api/accounts/me`, {
-      method: "GET",
-      headers: _defaultHeaders(),
-    }).then(async (response) => response.json());
+  async function getMyAccount(): Promise<SmockResponse> {
+    const getArtistResponse: SmockResponse = await _sendSmockApiRequest(
+      `/accounts/me`,
+      {
+        method: "GET",
+        headers: _defaultHeaders(),
+      }
+    );
 
-    if (getArtistResponse.status === SmockResponseStatus.SUCCESS) {
-      return getArtistResponse.data;
-    }
+    return getArtistResponse;
   }
 
   return {

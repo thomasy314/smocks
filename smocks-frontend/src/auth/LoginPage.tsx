@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import BasicAuthLogin from "../components/BasicAuthLogin";
+import { BASIC_AUTH_STORAGE_KEY } from "../auth/auth.constants";
+import BasicAuthLogin from "../auth/BasicAuthLogin";
 import {
   SmockResponseStatus,
   useSmocksNoAuthApi,
@@ -18,7 +19,7 @@ function LoginPage() {
   async function onLoginSuccessful(username: string, password: string) {
     const basicAuthToken = btoa(`${username}:${password}`);
 
-    localStorage.setItem("basicAuthToken", `${basicAuthToken}`);
+    localStorage.setItem(BASIC_AUTH_STORAGE_KEY, `${basicAuthToken}`);
 
     navigate("/");
   }

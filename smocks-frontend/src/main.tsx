@@ -1,10 +1,11 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import App from "./App";
+import AccountPage from "./account/AccountPage";
+import LoginPage from "./auth/LoginPage";
+import RegisterPage from "./auth/RegisterPage";
 import PrivateRoute from "./commonComponents/PrivateRoute";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
+import LandingPage from "./LandingPage";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -14,10 +15,11 @@ createRoot(document.getElementById("root")!).render(
           index
           element={
             <PrivateRoute>
-              <App />
+              <LandingPage />
             </PrivateRoute>
           }
         />
+        <Route path="/account" element={<AccountPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
       </Routes>

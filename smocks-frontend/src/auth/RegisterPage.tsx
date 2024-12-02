@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import BasicAuthLogin from "../components/BasicAuthLogin";
+import BasicAuthLogin from "../auth/BasicAuthLogin";
 import {
   SmockResponseStatus,
   useSmocksNoAuthApi,
