@@ -14,6 +14,7 @@ type ArtistData = {
   popularity: number;
   type: AssetType;
   url: string;
+  images: Record<string, string>[];
 };
 
 type ArtistProps = {
