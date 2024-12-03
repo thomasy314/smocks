@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useNoAuthSmocksApi } from "../hooks/use-smocks-api";
+import { useNoAuthSmocksApi } from "../smocksApi/use-smocks-api";
 
 function LogoutButton() {
   const { logout } = useNoAuthSmocksApi();

@@ -1,8 +1,5 @@
+import { AssetType } from "../smocksApi/use-smocks-api";
 import "./PositionSummary.css";
-
-enum AssetType {
-  ARTIST = "artist",
-}
 
 type AssetInfoData = {
   followers: number;

@@ -12,6 +12,10 @@ type SmockResponse = {
   data: any; //object | object[];
 };
 
+enum AssetType {
+  ARTIST = "artist",
+}
+
 enum OrderSide {
   BUY = "buy",
   SELL = "sell",
@@ -182,6 +186,7 @@ function useSmocksApi(basicAuthToken: string) {
 }
 
 export {
+  AssetType,
   OrderSide,
   OrderType,
   SmockResponseStatus,

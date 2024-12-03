@@ -1,5 +1,5 @@
 import { FormEvent } from "react";
-import { Order, OrderSide, OrderType } from "../hooks/use-smocks-api";
+import { Order, OrderSide, OrderType } from "../smocksApi/use-smocks-api";
 import "./OrderForm.css";
 
 type OrderFormProps = {

@@ -1,5 +1,5 @@
 import LogoutButton from "../auth/LogoutButton";
-import useSmocksData from "../hooks/use-smocks-data";
+import useSmocksData from "../smocksApi/use-smocks-data";
 import AccountSummary from "./AccountSummary";
 import Positions from "./Positions";
 

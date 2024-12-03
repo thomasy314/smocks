@@ -4,7 +4,7 @@ import BasicAuthLogin from "../auth/BasicAuthLogin";
 import {
   SmockResponseStatus,
   useNoAuthSmocksApi,
-} from "../hooks/use-smocks-api";
+} from "../smocksApi/use-smocks-api";
 
 function LoginPage() {
   const { login } = useNoAuthSmocksApi();

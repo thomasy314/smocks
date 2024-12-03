@@ -7,8 +7,6 @@ type PositionsProps = {
 };
 
 function Positions({ positions }: PositionsProps) {
-  console.log(positions);
-
   return (
     <>
       {positions ? (

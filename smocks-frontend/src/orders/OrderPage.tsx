@@ -1,7 +1,8 @@
 import Positions from "../account/Positions";
+import ArtistSearch from "../artists/ArtistSearch";
 import useBasicAuthState from "../auth/useAuthState";
-import { Order, OrderSide, useSmocksApi } from "../hooks/use-smocks-api";
-import useSmocksData from "../hooks/use-smocks-data";
+import { Order, OrderSide, useSmocksApi } from "../smocksApi/use-smocks-api";
+import useSmocksData from "../smocksApi/use-smocks-data";
 import OrderForm from "./OrderForm";
 
 function OrderPage() {
@@ -47,6 +48,9 @@ function OrderPage() {
         <section style={{ flex: 1 }}>
           <h1>Orders</h1>
           <OrderForm onOrder={handleOrder} />
+        </section>
+        <section>
+          <ArtistSearch />
         </section>
         <section style={{ flex: 1 }}>
           <Positions positions={positionsData} />
