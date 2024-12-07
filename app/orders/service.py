@@ -3,7 +3,8 @@ from datetime import datetime, timezone
 from sqlalchemy.exc import IntegrityError
 
 from app.accounts import Account
-from app.extensions import db, spotifyAPI
+from app.extensions import db
+from app.artists import artistService
 from app.orders.models.orders import Order, OrderSide, OrderStatus, OrderType
 from app.positions import Position
 
@@ -44,18 +45,17 @@ def execute_market_order(order):
         4. update status to completed
         5. commit
     """
-    artist = spotifyAPI.get_artist(order.asset_id)
-    smock_price = artist['popularity']
+    artist = artistService.get_artist_from_id(order.asset_id)
 
     side_mult = 1 if order.side == OrderSide.buy else -1
 
     quantity = order.quantity * side_mult
 
     if order.notional:
-        quantity = order.notional//smock_price * side_mult
+        quantity = order.notional//artist.smock_price * side_mult
 
     account = Account.query.get_or_404(order.account_id)
-    account.balance -= artist['popularity'] * quantity
+    account.balance -= artist.smock_price * quantity
 
     position = Position.query.get((order.account_id, order.asset_id))
 
@@ -64,12 +64,12 @@ def execute_market_order(order):
             asset_id=order.asset_id,
             account_id=order.account_id,
             quantity=quantity,
-            average_entry_price=smock_price
+            average_entry_price=artist.smock_price
         )
     else:
         position.quantity += quantity
         if position.quantity != 0:
-            position.average_entry_price += (smock_price - position.average_entry_price)/(position.quantity)
+            position.average_entry_price += (artist.smock_price - position.average_entry_price)/(position.quantity)
         else:
             position.average_entry_price = 0
 

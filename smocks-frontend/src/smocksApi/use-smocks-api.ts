@@ -1,3 +1,6 @@
+import { AccountData } from "../account/AccountSummary";
+import { PositionData } from "../account/PositionSummary";
+import { ArtistData } from "../artists/Artist";
 import useBasicAuthState from "../auth/useAuthState";
 import { snakeCaseToCamelCase } from "../utils";
 
@@ -9,7 +12,7 @@ enum SmockResponseStatus {
 
 type SmockResponse = {
   status: SmockResponseStatus;
-  data: any; //object | object[];
+  data: object | object[];
 };
 
 enum AssetType {
@@ -84,7 +87,10 @@ function useSmocksApi(basicAuthToken: string) {
     return headers;
   }
 
-  async function _sendSmockApiRequest(url: string, requestInit: RequestInit) {
+  async function _sendSmockApiRequest(
+    url: string,
+    requestInit: RequestInit
+  ): Promise<object | object[]> {
     const defaultHeaders = _defaultHeaders();
     const headers = new Headers({
       ...Object.fromEntries(defaultHeaders.entries()),
@@ -98,53 +104,51 @@ function useSmocksApi(basicAuthToken: string) {
 
     if (request.status === SmockResponseStatus.SUCCESS) {
       request.data = snakeCaseToCamelCase(request.data);
+    } else {
+      throw Error(JSON.stringify(request));
     }
 
-    return request;
+    return request.data;
   }
 
-  async function getArtist(artist_id: string): Promise<SmockResponse> {
-    const getArtistResponse: SmockResponse = await _sendSmockApiRequest(
+  async function getArtist(artist_id: string): Promise<ArtistData> {
+    const getArtistResponse: object = await _sendSmockApiRequest(
       `/artists/${artist_id}`,
       {
         method: "GET",
       }
     );
 
-    return getArtistResponse;
+    return getArtistResponse as ArtistData;
   }
 
-  async function getMyAccount(): Promise<SmockResponse> {
-    const getMyAccountResponse: SmockResponse = await _sendSmockApiRequest(
+  async function getMyAccount(): Promise<AccountData> {
+    const getMyAccountResponse: object = await _sendSmockApiRequest(
       `/accounts/me`,
       {
         method: "GET",
       }
     );
 
-    return getMyAccountResponse;
+    return getMyAccountResponse as AccountData;
   }
 
-  async function getMyPositions(): Promise<SmockResponse> {
-    const getMyPositionsResponse: SmockResponse = await _sendSmockApiRequest(
+  async function getMyPositions(): Promise<PositionData[]> {
+    const getMyPositionsResponse: object = await _sendSmockApiRequest(
       `/positions/`,
       {
         method: "GET",
       }
     );
 
-    if (getMyPositionsResponse.data) {
-      getMyPositionsResponse.data = Object.values(getMyPositionsResponse.data);
-    }
-
-    return getMyPositionsResponse;
+    return Object.values(getMyPositionsResponse) as PositionData[];
   }
 
   async function createPurchaseOrder({
     assetId,
     type,
     quantity,
-  }: Order): Promise<SmockResponse> {
+  }: Order): Promise<object> {
     return await _sendSmockApiRequest(`/orders/buy`, {
       method: "POST",
       headers: {
@@ -162,7 +166,7 @@ function useSmocksApi(basicAuthToken: string) {
     assetId,
     type,
     quantity,
-  }: Order): Promise<SmockResponse> {
+  }: Order): Promise<object> {
     return await _sendSmockApiRequest(`/orders/sell`, {
       method: "POST",
       headers: {

@@ -1,5 +1,3 @@
-from functools import reduce
-
 from sqlalchemy import CheckConstraint
 
 from app.auth.utils import mask_value

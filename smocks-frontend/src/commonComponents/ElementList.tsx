@@ -3,7 +3,7 @@ import { FC } from "react";
 type ElementListProps = {
   element: FC;
   elementAttr: string;
-  data: Record<string, any>[];
+  data: Record<string, object | string>[];
   idKey?: string;
 };
 

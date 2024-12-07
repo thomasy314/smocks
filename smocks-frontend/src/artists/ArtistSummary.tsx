@@ -32,7 +32,7 @@ function ArtistSummary({ artistData, showImage = true }: ArtistSummaryProps) {
       }}
     >
       <h3>{name}</h3>
-      {image && (
+      {showImage && image && (
         <img
           style={imageStyle}
           src={image["url"]}

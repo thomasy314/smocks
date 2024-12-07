@@ -22,12 +22,10 @@ function OrderPage() {
   async function handleOrder(orderSide: OrderSide, order: Order) {
     switch (orderSide) {
       case OrderSide.BUY:
-        const purchaseResult = await createPurchaseOrder(order);
-        console.log("purchase", purchaseResult);
+        createPurchaseOrder(order);
         break;
       case OrderSide.SELL:
-        const saleResult = await createSaleOrder(order);
-        console.log("sale", saleResult);
+        createSaleOrder(order);
         break;
     }
 

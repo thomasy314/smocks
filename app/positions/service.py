@@ -9,4 +9,4 @@ def get_account_positions(account_id):
 def get_account_market_value(account_id):
     positions = get_account_positions(account_id)
 
-    return reduce(lambda a, b: a + b.quantity * b.asset_info['popularity'], positions, 0)
+    return reduce(lambda a, b: a + b.quantity * b.asset_info.smock_price, positions, 0)

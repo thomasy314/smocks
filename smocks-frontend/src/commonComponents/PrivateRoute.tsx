@@ -2,9 +2,7 @@ import { PropsWithChildren, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useBasicAuthState from "../auth/useAuthState";
 
-type RequireBasicAuthProps = {};
-
-function PrivateRoute({ children }: PropsWithChildren<RequireBasicAuthProps>) {
+function PrivateRoute({ children }: PropsWithChildren) {
   const { basicAuthToken } = useBasicAuthState();
   const navigate = useNavigate();
 

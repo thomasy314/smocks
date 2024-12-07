@@ -15,7 +15,7 @@ function RegisterPage() {
     );
   }
 
-  async function onRegisterSuccessful(username: string, password: string) {
+  async function onRegisterSuccessful() {
     navigate("/login");
   }
 

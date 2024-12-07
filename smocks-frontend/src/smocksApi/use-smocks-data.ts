@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { AccountData } from "../account/AccountSummary";
 import { PositionData } from "../account/PositionSummary";
 import useBasicAuthState from "../auth/useAuthState";
-import { SmockResponseStatus, useSmocksApi } from "./use-smocks-api";
+import { useSmocksApi } from "./use-smocks-api";
 
 function useSmocksData() {
   const { basicAuthToken } = useBasicAuthState();
@@ -20,12 +20,8 @@ function useSmocksData() {
       const myAccountResults = await getMyAccount();
       const myPositionsResults = await getMyPositions();
 
-      if (myAccountResults.status === SmockResponseStatus.SUCCESS) {
-        setAccountData(myAccountResults.data as AccountData);
-      }
-      if (myPositionsResults.status == SmockResponseStatus.SUCCESS) {
-        setPositionsData(myPositionsResults.data);
-      }
+      setAccountData(myAccountResults);
+      setPositionsData(myPositionsResults);
     };
     fetchAccount();
   }, []);
@@ -33,19 +29,15 @@ function useSmocksData() {
   async function refreshPositionData(): Promise<PositionData[]> {
     const myPositionsResults = await getMyPositions();
 
-    if (myPositionsResults.status == SmockResponseStatus.SUCCESS) {
-      setPositionsData(myPositionsResults.data);
-    }
-    return myPositionsResults.data;
+    setPositionsData(myPositionsResults);
+    return myPositionsResults;
   }
 
   async function refreshAccountData(): Promise<AccountData> {
     const myAccountResults = await getMyAccount();
 
-    if (myAccountResults.status === SmockResponseStatus.SUCCESS) {
-      setAccountData(myAccountResults.data);
-    }
-    return myAccountResults.data;
+    setAccountData(myAccountResults);
+    return myAccountResults;
   }
 
   return {

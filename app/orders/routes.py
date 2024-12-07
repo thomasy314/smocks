@@ -26,6 +26,8 @@ def get_order(account_id, order_id):
 def create_order(account_id):
     """ create smock buy order"""
 
+    print('HERE')
+
     side = request.path.split('/')[-1]
 
     # Create new Order
