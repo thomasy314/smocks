@@ -17,3 +17,11 @@ class AccountConfig:
 class SpotifyConfig:
     CLIENT_ID = os.getenv('SPOTIFY_CLIENT_ID')
     CLIENT_SECRET = os.getenv('SPOTIFY_CLIENT_SECRET')
+
+class TidalConfig:
+    CLIENT_ID = os.getenv('TIDAL_CLIENT_ID')
+    CLIENT_SECRET = os.getenv('TIDAL_CLIENT_SECRET')
+
+class GoogleConfig:
+    SEARCH_KEY = os.getenv('GOOGLE_SEARCH_API_KEY')
+    SEARCH_BILLBOARD_ENGINE = os.getenv('GOOGLE_SEARCH_BILLBOARD_ENGINE')

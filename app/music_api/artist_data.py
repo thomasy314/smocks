@@ -6,9 +6,16 @@ class SpotifyArtistData():
 
     id: str
     url: str
-    popularity: Union[int, float]
+    popularity: int
     followers: int
 
+@dataclass
+class TidalArtistData():
+
+    id: str
+    url: str
+    popularity: float
+    
 @dataclass
 class ArtistData():
 

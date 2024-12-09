@@ -1,15 +1,16 @@
 import requests
 from werkzeug.exceptions import NotFound
 
-from app.music_api.artist_data import ArtistData, SpotifyArtistData
-from app.music_api.spotify_credentials import SpotifyAuth
+from app.music_api.artist_data import ArtistData
+from app.music_api.tidal_credentials import TidalAuth
 from config import DEFAULT_REQUEST_TIMEOUT
 
-class SpotifyAPI():
 
-    BASE_URL = 'https://api.spotify.com/v1'
+class TidalAPI():
 
-    def __init__(self, Auth=SpotifyAuth):
+    BASE_URL = 'https://openapi.tidal.com/v2'
+
+    def __init__(self, Auth=TidalAuth):
         self.auth = Auth()
 
     def get_artist(self, artist_id: str) -> ArtistData:
