@@ -4,7 +4,8 @@ from flask_cors import CORS
 
 from app.error_handler import register_error_handlers
 from app.extensions import bcrypt, db
-from app.music_api.tidal_credentials import TidalAuth
+from app.music_api.musicbrainz_api import MusicBrainzAPI
+from app.music_api.tidal_api import TidalAPI
 from app.smock_response import SmockResponse
 from config import Config
 
