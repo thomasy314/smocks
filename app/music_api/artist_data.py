@@ -1,22 +1,29 @@
-from dataclasses import dataclass
-from typing import Union, Optional
+from dataclasses import asdict, dataclass
+from typing import List, Optional
+
 
 @dataclass
 class SpotifyArtistData():
     id: str
+    name: str
     url: str
     popularity: int
     followers: int
+    monthly_listeners: int
 
 @dataclass
 class TidalArtistData():
     id: str
+    name: str
     url: str
     popularity: float
 
 @dataclass
-class MusicBrainzData():
+class MusicBrainzArtistData():
     id: str
+    name: str
+    spotifyIds: List[str]
+    tidalIds: List[str]
     
 @dataclass
 class ArtistData():
@@ -24,24 +31,11 @@ class ArtistData():
     name: str
     spotify: Optional[SpotifyArtistData] = None
     tidal: Optional[TidalArtistData] = None
-    musicBrainz: Optional[MusicBrainzData] = None
+    musicBrainz: Optional[MusicBrainzArtistData] = None
     
     @property
     def serialize(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-            'spotify': {
-                'url': self.spotify.url,
-                'followers': self.spotify.followers,
-                'popularity': self.spotify.popularity
-            },
-            'tidal': {
-                'id': self.tidal.id,
-                'url': self.tidal.url,
-                'popularity': self.tidal.popularity
-            }
-        }
+        return asdict(self)
 
     @property
     def smock_price(self):
