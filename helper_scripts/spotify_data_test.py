@@ -9,7 +9,7 @@ sys.path.append(os.path.abspath(os.path.join(file_path, '..')))
 
 from app.music_api.music_api import MusicAPI
 
-artist_id = '381086ea-f511-4aba-bdf9-71c753dc5077'
+artist_id = '381086ea-f511-4aba-bdf9-71c753dc5077' # kendrick lamar
 music_api = MusicAPI()
 file_name = "artist_test_data.txt"
 file_loc = os.path.join(file_path, file_name)
