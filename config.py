@@ -1,8 +1,12 @@
+import logging
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 DEFAULT_REQUEST_TIMEOUT = 10
+
+
+logging.basicConfig(level=logging.INFO)
 
 class Config:
     SECRET_KEY=os.getenv('SMOCKS_SECRET_KEY')

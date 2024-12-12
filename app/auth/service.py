@@ -1,4 +1,5 @@
 from app.accounts.models.account import Account
+from app.auth.exceptions import UserAlreadyExists
 from app.extensions import bcrypt, db
 
 
@@ -15,7 +16,7 @@ def check_account_credentials(username, password):
 
 def create_account(username, password):
     if Account.query.filter_by(username=username).first():
-        return None
+        raise UserAlreadyExists(username)
 
     hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
 

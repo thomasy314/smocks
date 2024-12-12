@@ -1,0 +1,18 @@
+version: "3.8"
+services:
+  smocks-helper-script:
+    container_name: smocks-helper-script
+    build:
+      context: .
+      target: dev
+    volumes:
+      - ./:/app
+    command: python3 ./helper_scripts/collect_test_data.py
+    environment:
+      - SMOCKS_SECRET_KEY=${SMOCKS_SECRET_KEY}
+      - SPOTIFY_CLIENT_ID=${SPOTIFY_CLIENT_ID}
+      - SPOTIFY_CLIENT_SECRET=${SPOTIFY_CLIENT_SECRET}
+      - TIDAL_CLIENT_ID=${TIDAL_CLIENT_ID}
+      - TIDAL_CLIENT_SECRET=${TIDAL_CLIENT_SECRET}
+      - GOOGLE_SEARCH_API_KEY=${GOOGLE_SEARCH_API_KEY}
+      - GOOGLE_SEARCH_BILLBOARD_ENGINER=${GOOGLE_SEARCH_BILLBOARD_ENGINER}

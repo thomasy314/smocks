@@ -1,5 +1,6 @@
 from flask import Blueprint, request
 
+from app.auth.exceptions import UserAlreadyExists
 from app.auth.service import check_account_credentials, create_account
 from app.auth.validators.request_validator import LoginBody, RegisterBody
 from app.request_validator import validate_request
@@ -41,10 +42,10 @@ def register():
     if not password:
         return "missing password", 400
 
-    new_user = create_account(username=username, password=password)
-
-    if not new_user:
-        return "Unable to create user", 400
+    try:
+        new_user = create_account(username=username, password=password)
+    except UserAlreadyExists:
+        return "User already exists", 409
 
     response = SmockResponse(new_user.serialize, status=201)
     response.headers['Location'] = f'/accounts/{new_user.masked_id}'
