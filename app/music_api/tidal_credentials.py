@@ -1,5 +1,5 @@
-import time
 import base64
+import time
 
 import requests
 
@@ -32,7 +32,7 @@ class TidalAuth():
         'Content-Type': 'application/x-www-form-urlencoded'
         }
 
-        response = requests.request("POST", url, headers=headers, data=payload)
+        response = requests.post(url, headers=headers, data=payload, timeout=DEFAULT_REQUEST_TIMEOUT)
         data = response.json()
 
         self.access_token = data['access_token']
