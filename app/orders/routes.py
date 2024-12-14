@@ -1,5 +1,3 @@
-import logging
-
 from flask import Blueprint, request
 from sqlalchemy.exc import IntegrityError
 
@@ -16,6 +14,9 @@ bp = Blueprint('orders', __name__)
 @authorize_request(add_account_id=True)
 def get_order(account_id, order_id):
     order = get_order_by_id(order_id=unmask_value(order_id))
+
+    if not order:
+        return 'Order not found', 404
 
     if order.account_id != account_id:
         return 'Forbidden', 403

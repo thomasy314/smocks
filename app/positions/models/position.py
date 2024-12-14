@@ -2,11 +2,12 @@ from sqlalchemy import CheckConstraint
 
 from app.auth.utils import mask_value
 from app.extensions import db
-from app.artists import artistService
 
 
 class Position(db.Model):
     __tablename__ = "positions"
+
+    asset_info = None
 
     account_id = db.Column(db.Integer, primary_key=True)
     asset_id = db.Column(db.Integer, primary_key=True)
@@ -24,28 +25,10 @@ class Position(db.Model):
     @property
     def serialize(self):
 
-        asset_info = self.asset_info
-
         return {
-            'id': f'{self.masked_account_id}:{asset_info.id}',
+            'id': f'{self.masked_account_id}:{self.asset_id}',
             'account_id': self.masked_account_id,
-            'asset_info': asset_info.serialize,
+            'asset': self.asset_info if self.asset_info else self.asset_id,
             'quantity': self.quantity,
             'average_entry_price': self.average_entry_price
         }
-
-    @property
-    def asset_info(self):
-        artist_info = artistService.get_artist_from_id(self.asset_id)
-
-        # TODO: Add error handling
-
-        return artist_info
-        # return {
-        #     "id": artist_info['id'],
-        #     "url": artist_info['external_urls']['spotify'],
-        #     "followers": artist_info['followers']['total'],
-        #     "name": artist_info['name'],
-        #     "popularity": artist_info['popularity'],
-        #     "type": artist_info['type']
-        # }
