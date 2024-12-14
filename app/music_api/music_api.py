@@ -1,12 +1,6 @@
 from functools import reduce
-from pprint import pprint
 
-from app.music_api.artist_data import (
-    ArtistData,
-    MusicBrainzArtistData,
-    SpotifyArtistData,
-    TidalArtistData,
-)
+from app.music_api.artist_data import ArtistData, MusicBrainzArtistData
 from app.music_api.musicbrainz_api import MusicBrainzAPI
 from app.music_api.spotify_api import SpotifyAPI
 from app.music_api.tidal_api import TidalAPI

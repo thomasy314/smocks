@@ -1,8 +1,7 @@
-from traceback import format_exc
-
 from flask import make_response
+from werkzeug.exceptions import InternalServerError, NotFound
 
-from werkzeug.exceptions import NotFound
+from config import smocksLogger
 
 
 def register_error_handlers(app):
@@ -19,8 +18,15 @@ def register_error_handlers(app):
     def not_found_handler(error):
         return error.description, 404
 
+    @app.errorhandler(InternalServerError)
+    def internal_server_error(error: InternalServerError):
+        smocksLogger.error(error.description, exc_info=True)
+
+        return "Internal Error", 500
+
     @app.errorhandler(Exception)
     def generic_error_handler(error):
-        print("Internal Error: ", format_exc())
+        message = f"Improperly handled exception: {str(error)}"
+        smocksLogger.error(message, exc_info=True)
 
         return "Internal Error", 500

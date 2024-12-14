@@ -19,10 +19,8 @@ class ArtistService():
         if (artist_id in self.artist_data 
             and artist_id in self.artist_data_expiration 
             and self.artist_data_expiration[artist_id] > current_time):
-            print('cache')
             return self.artist_data[artist_id]
         else:
-            print('interwebs')
             artist_info: ArtistData = self.music_api.get_artist(artist_id)
             self.artist_data[artist_id] = artist_info
             self.artist_data_expiration[artist_id] = current_time + self.artist_data_ttl

@@ -5,7 +5,7 @@ from typing import List
 import requests
 from werkzeug.exceptions import InternalServerError, NotFound
 
-from app.music_api.artist_data import ArtistData, MusicBrainzArtistData
+from app.music_api.artist_data import MusicBrainzArtistData
 from config import DEFAULT_REQUEST_TIMEOUT
 
 
@@ -73,7 +73,7 @@ class MusicBrainzAPI():
         for relation in relationships:
             if 'url' in relation and 'resource' in relation['url']:
                 url = relation['url']['resource']
-                if platform.value in url:
+                if platform.value in url and "streaming" in relation['type']:
                     spotify_id = url.split('/')[-1]
                     ids.append(spotify_id)
 

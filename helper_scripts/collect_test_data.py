@@ -1,9 +1,10 @@
 import json
-import logging
 import os
 import sys
 from datetime import datetime, timezone
 from time import sleep
+
+from config import smocksLogger
 
 file_path = os.path.dirname(__file__)
 sys.path.append(os.path.abspath(os.path.join(file_path, '..')))
@@ -17,8 +18,8 @@ file_loc = os.path.join(file_path, file_name)
 
 while(True):
     artist_data = music_api.get_artist(artist_id).serialize
-    logging.info(f"Fetched data for artist ID {artist_id} at {datetime.now(timezone.utc).isoformat(timespec="seconds")}")
-    logging.info(artist_data)
+    smocksLogger.info(f"Fetched data for artist ID {artist_id} at {datetime.now(timezone.utc).isoformat(timespec="seconds")}")
+    smocksLogger.info(artist_data)
 
     with open(file_loc, "a+") as file:
         file.write(json.dumps(artist_data) + "\n")

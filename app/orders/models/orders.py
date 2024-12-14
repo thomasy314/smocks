@@ -1,7 +1,6 @@
 from enum import Enum
 
 from sqlalchemy import CheckConstraint, ForeignKey
-from sqlalchemy.ext.hybrid import hybrid_property
 
 from app.accounts import Account
 from app.auth import mask_value
@@ -34,11 +33,12 @@ class Order(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     account_id = db.Column(db.Integer, ForeignKey(Account.id), nullable=False)
-    asset_id = db.Column(db.String, nullable=False)
+    asset_id = db.Column(db.Text, nullable=False)
     side = db.Column(db.Enum(OrderSide), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False)
     updated_at = db.Column(db.DateTime, nullable=False)
     status = db.Column(db.Enum(OrderStatus), nullable=False)
+    status_reason = db.Column(db.Text)
     limit_price = db.Column(db.Float)
     stop_price = db.Column(db.Float)
     type = db.Column(db.Enum(OrderType), nullable=False)
@@ -69,6 +69,7 @@ class Order(db.Model):
             'create_at': self.created_at.isoformat(),
             'updated_at': self.updated_at.isoformat(),
             'status': self.status.value,
+            'status_reason': self.status_reason,
             'limit_price': self.limit_price,
             'stop_price': self.stop_price,
             'type': self.type.value,

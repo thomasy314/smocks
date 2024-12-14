@@ -1,9 +1,8 @@
-
 from dataclasses import dataclass
 from enum import Enum
 from typing import Optional, Union
 
-from flask import Response, json, make_response
+from flask import Response, json
 
 
 class SmockResponseStatus(Enum):

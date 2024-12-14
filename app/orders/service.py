@@ -3,8 +3,9 @@ from datetime import datetime, timezone
 from sqlalchemy.exc import IntegrityError
 
 from app.accounts import Account
-from app.extensions import db
 from app.artists import artistService
+from app.extensions import db
+from app.orders.exceptions import NotEnoughFundsException
 from app.orders.models.orders import Order, OrderSide, OrderStatus, OrderType
 from app.positions import Position
 
@@ -36,7 +37,7 @@ def create_new_order(asset_id, account_id, side, quantity, notional, limit_price
     return new_order
 
 
-def execute_market_order(order):
+def execute_market_order(order: Order):
     """
     buying:
         1. get quantity
@@ -54,10 +55,17 @@ def execute_market_order(order):
     if order.notional:
         quantity = order.notional//artist.smock_price * side_mult
 
-    account = Account.query.get_or_404(order.account_id)
-    account.balance -= artist.smock_price * quantity
+    order_cost = artist.smock_price * quantity
 
-    position = Position.query.get((order.account_id, order.asset_id))
+    account: Account = Account.query.get_or_404(order.account_id)
+
+    if account.balance - order_cost < 0:
+        order.status_reason = "Not enough funds"
+        raise NotEnoughFundsException()
+
+    account.balance -= order_cost
+
+    position: Position = Position.query.get((order.account_id, order.asset_id))
 
     if not position:
         position = Position(
@@ -83,13 +91,18 @@ def execute_market_order(order):
         db.session.commit()
     except IntegrityError as error:
         db.session.rollback()
-        order.status = OrderStatus.failed
-        db.session.commit()
+        # TODO: Improve error message passed to user
+        order.status_reason = str(error.orig)
         raise error
 
-def excecute_order(order):
+def excecute_order(order: Order):
     order_type_funcs = {
         OrderType.market: execute_market_order
     }
 
-    order_type_funcs[order.type](order)
+    try:
+        order_type_funcs[order.type](order)
+    except Exception as e:
+        order.status = OrderStatus.failed
+        db.session.commit()
+        raise e

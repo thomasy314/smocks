@@ -5,9 +5,6 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 DEFAULT_REQUEST_TIMEOUT = 10
 
-
-logging.basicConfig(level=logging.INFO)
-
 class Config:
     SECRET_KEY=os.getenv('SMOCKS_SECRET_KEY')
     SQLALCHEMY_DATABASE_URI = os.getenv(
@@ -29,3 +26,15 @@ class TidalConfig:
 class GoogleConfig:
     SEARCH_KEY = os.getenv('GOOGLE_SEARCH_API_KEY')
     SEARCH_BILLBOARD_ENGINE = os.getenv('GOOGLE_SEARCH_BILLBOARD_ENGINE')
+
+smocksLogger = logging.getLogger("smocks")
+
+# Create a formatter
+formatter = logging.Formatter('%(levelname)s: %(asctime)s - %(message)s')
+
+# Create a handler and set the formatter
+handler = logging.StreamHandler()
+handler.setFormatter(formatter)
+
+smocksLogger.setLevel(os.getenv('LOGGING_LEVEL', default=logging.WARNING))
+smocksLogger.addHandler(handler)

@@ -25,7 +25,7 @@ def login():
     login_successful = check_account_credentials(username=username, password=password)
 
     if login_successful:
-        return "", 200
+        return "", 204
     else:
         return "", 401
 

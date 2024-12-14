@@ -1,7 +1,10 @@
-from flask import Blueprint, make_response, request
+import logging
+
+from flask import Blueprint, request
 from sqlalchemy.exc import IntegrityError
 
 from app.auth import authorize_request, unmask_value
+from app.orders.exceptions import NotEnoughFundsException
 from app.orders.service import create_new_order, excecute_order, get_order_by_id
 from app.orders.validators.create_order_request import CreateOrderRequest
 from app.request_validator import validate_request
@@ -25,8 +28,6 @@ def get_order(account_id, order_id):
 @authorize_request(add_account_id=True)
 def create_order(account_id):
     """ create smock buy order"""
-
-    print('HERE')
 
     side = request.path.split('/')[-1]
 
@@ -53,10 +54,12 @@ def create_order(account_id):
     try:
         excecute_order(new_order)    
 
-
         response = SmockResponse(new_order.serialize, 201)
         response.headers['Location'] = f'/orders/{new_order.masked_id}'
         return response
-    except IntegrityError as error:
-        return str(error.orig), 400
+    except IntegrityError:
+        return SmockResponse(new_order.serialize, 400)
+    except NotEnoughFundsException:
+        return SmockResponse(new_order.serialize, 400)
+
 

@@ -11,7 +11,7 @@ from werkzeug.exceptions import InternalServerError, NotFound
 
 from app.music_api.artist_data import SpotifyArtistData
 from app.music_api.spotify_credentials import SpotifyAuth
-from config import DEFAULT_REQUEST_TIMEOUT
+from config import DEFAULT_REQUEST_TIMEOUT, smocksLogger
 
 
 @dataclass
@@ -98,6 +98,7 @@ class SpotifyAPI():
 
         soup = BeautifulSoup(response.content, features='lxml')
 
+        smocksLogger.info(soup.prettify())
         listener_text = soup.find(class_="ovtJYocZljdWcU1FLBL5").text
 
         scrapedData = ScrapedSpotifyArtistData(
